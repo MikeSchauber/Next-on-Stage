@@ -1,0 +1,41 @@
+<h2>🎉 Neues Festival hinzufügen</h2>
+<form #festivalForm="ngForm" (ngSubmit)="crudManager.addFestival(festivalForm)" style="margin-top: 1rem;">
+
+    <label>Festival Name</label>
+    <input type="text" name="name" [(ngModel)]="modalService.newFestival.name" required />
+
+    <label>Ort</label>
+    <input type="text" name="location" [(ngModel)]="modalService.newFestival.location" required />
+
+    <label>Startdatum</label>
+    <input type="date" name="startDate" [(ngModel)]="modalService.newFestival.startDate" required />
+
+    <label>Enddatum</label>
+    <input type="date" name="endDate" [(ngModel)]="modalService.newFestival.endDate" required />
+
+    <label>Stages</label>
+    <div class="flex gap-8">
+        <input type="text" [(ngModel)]="modalService.newStageName" name="stageInput" placeholder="Stage-Name eingeben" />
+        <button type="button" class="btn" (click)="modalService.addStage()">➕ Hinzufügen</button>
+    </div>
+
+    <!-- Anzeige der hinzugefügten Stages -->
+    <ul style="margin-top: 0.5rem;" class="stages-list">
+        @for (stage of modalService.newFestival.stages; track $index) {
+        <li style="margin-left: 40px">
+            {{ stage }}
+            <button type="button" (click)="modalService.removeStage($index)"
+                style="margin-left: 2rem; color:red;">✖</button>
+        </li>
+        }
+    </ul>
+
+    <label>Emoji/Icon</label>
+    <input type="text" name="emoji" [(ngModel)]="modalService.newFestival.emoji" placeholder="🌞 🎧 🔥" />
+
+    <div class="flex between" style="margin-top: 1rem;">
+        <button type="button" class="btn" style="background:#9ca3af;"
+            (click)="modalService.closeModal()">Abbrechen</button>
+        <button type="submit" class="btn" [disabled]="festivalForm.invalid">Speichern</button>
+    </div>
+</form>

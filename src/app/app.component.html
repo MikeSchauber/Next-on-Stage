@@ -1,11 +1,10 @@
-<!-- src/app/app.component.html -->
 <div class="container">
 
   <!-- Header -->
-  <header class="flex between" style="padding: 1rem 0;">
+  <header class="flex between" style="padding: 1rem 0;" #header>
     <div class="logo flex center">
-      <img src="assets/logo.svg" alt="nextOnStage Logo" style="height: 40px; margin-right: 0.5rem;">
-      <h2>nextOnStage</h2>
+      <img src="" alt="nextOnStage Logo" style="height: 40px; margin-right: 0.5rem;">
+      <h2>Next on Stage</h2>
     </div>
     <nav class="flex center" style="gap: 1rem;">
       <a routerLink="/" routerLinkActive="active">Home</a>
@@ -14,6 +13,18 @@
     </nav>
   </header>
 
+
+  <!-- Aktives Festival -->
+  @if (crudManager.activeFestival) {
+  <div class="active-festival card shadow flex center">
+    <h3>{{ crudManager.activeFestival.emoji }} {{ crudManager.activeFestival.name }}</h3>
+    <p>{{ crudManager.activeFestival.location }} | {{ crudManager.activeFestival.startDate | date:'dd.MM.yyyy' }} - {{
+      crudManager.activeFestival.endDate |
+      date:'dd.MM.yyyy' }}</p>
+  </div>
+  }
+
+  @if (crudManager.festivals.length === 0) {
   <!-- Hero Section -->
   <section class="hero card shadow flex center" style="flex-direction: column; text-align: center; margin: 2rem 0;">
     <h1>Dein Festival-Planer 🎶</h1>
@@ -21,38 +32,57 @@
       Mit <strong>nextOnStage</strong> kannst du deine Festivals speichern, Lineups ansehen
       und deine Lieblings-DJs nie wieder verpassen.
     </p>
-    <button class="btn" routerLink="/festivals">Festival hinzufügen</button>
+    <button class="btn" (click)="modalService.openModal('festival')">Festival hinzufügen</button>
   </section>
-
+  } @else {
   <!-- Festival Liste -->
+
   <section>
+
     <h2 style="margin-bottom: 1rem;">Meine Festivals</h2>
-
     <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
-      <!-- Beispiel Festival Cards (später dynamisch via *ngFor) -->
-      <div class="card">
-        <h3>🌞 Fusion Festival 2025</h3>
-        <p class="text-muted">Lärz, Deutschland • 26.06 – 30.06</p>
-        <button class="btn" style="margin-top: 1rem;" routerLink="/festivals/1">Line-Up ansehen</button>
-      </div>
+      @for (festival of crudManager.festivals; track $index) {
+      <div class="festival-card card">
+        <h3>{{ festival.emoji }} {{ festival.name }}</h3>
+        <p class="text-muted">{{ festival.location }} • {{ festival.startDate }} - {{ festival.endDate }}</p>
+        <div class="lineup-buttons">
+          <button class="btn" (click)="crudManager.setActiveFestival(festival)">Festival aktivieren</button>
 
-      <div class="card">
-        <h3>🎧 Tomorrowland</h3>
-        <p class="text-muted">Boom, Belgien • 18.07 – 27.07</p>
-        <button class="btn" style="margin-top: 1rem;" routerLink="/festivals/2">Line-Up ansehen</button>
+          <button class="btn" (click)="modalService.openModal('lineUp')">Line-Up
+            bearbeiten</button>
+        </div>
       </div>
-
-      <div class="card">
-        <h3>🔥 Nature One</h3>
-        <p class="text-muted">Kastellaun, Deutschland • 01.08 – 03.08</p>
-        <button class="btn" style="margin-top: 1rem;" routerLink="/festivals/3">Line-Up ansehen</button>
-      </div>
+      }
     </div>
   </section>
+  <div class="more-festivals" >
+    <button class="btn" (click)="modalService.openModal('festival')">Festival hinzufügen</button>
+  </div>
+  }
+
+
+
+
+
 
   <!-- Footer -->
   <footer class="text-muted" style="text-align: center; padding: 2rem 0; font-size: 0.85rem;">
-    © 2025 nextOnStage – Dein Festival Companion
+    © 2025 Next on Stage - Developer: Mike Schauber
   </footer>
+
+  <!-- Modal -->
+  @if (modalService.showModal) {
+  <div class="modal-backdrop" #container (click)="modalService.closeModal()"></div>
+  <div class="modal  shadow">
+    @if (modalService.showFestivalModal) {
+    <app-add-festival-modal></app-add-festival-modal>
+    }
+    @else if (modalService.showLineupModal) {
+    <app-edit-lineup-modal></app-edit-lineup-modal>
+    }
+
+  </div>
+  }
+
 
 </div>

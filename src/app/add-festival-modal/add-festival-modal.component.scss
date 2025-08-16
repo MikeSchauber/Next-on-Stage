@@ -1,0 +1,4 @@
+@import "../../mixins.scss";
+.stages-list {
+  @include dFlex($ai: flex-start, $g: 8px);
+}

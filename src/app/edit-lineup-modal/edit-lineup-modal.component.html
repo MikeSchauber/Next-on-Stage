@@ -1,0 +1,60 @@
+<h2 #lineUpContainer>🎶 LineUp bearbeiten</h2>
+
+@for (festival of crudManager.festivals; track $index) {
+
+
+<!-- Formular zum Hinzufügen neuer Acts -->
+<form #lineUpForm="ngForm" (ngSubmit)="crudManager.addLineUpAct(festival, lineUpForm)" class="lineup-form">
+
+    <label>Künstlername</label>
+    <input type="text" name="artistName" [(ngModel)]="modalService.newLineUpAct.artistName" required />
+
+    <label>Datum</label>
+    <input type="date" name="date" #dateInput (click)="openPicker(dateInput)"
+        [(ngModel)]="modalService.newLineUpAct.date" required />
+
+    <label>Uhrzeit Beginn</label>
+    <input type="time" name="time" #timeBeginnInput (click)="openPicker(timeBeginnInput)"
+        [(ngModel)]="modalService.newLineUpAct.timeBeginn" required />
+
+    <label>Uhrzeit Ende</label>
+    <input type="time" name="time" #timeEndInput (click)="openPicker(timeEndInput)"
+        [(ngModel)]="modalService.newLineUpAct.timeEnd" required />
+
+    <label>Stage</label>
+    <select name="stage" [(ngModel)]="modalService.newLineUpAct.stage" required>
+        <option value="">-- bitte auswählen --</option>
+        @for (stage of festival.stages; track $index) {
+        <option [value]="stage">{{ stage }}</option>
+        }
+    </select>
+
+    <div class="flex between" style="margin-top: 1rem;">
+        <button type="button" class="btn" style="background:#9ca3af;"
+            (click)="crudManager.closeLineUpForm()">Abbrechen</button>
+        <button type="submit" class="btn">
+            {{ crudManager.editingIndex !== null ? '💾 Änderungen speichern' : '➕ Act hinzufügen' }}
+        </button>
+    </div>
+    @if (crudManager.editingIndex !== null) {
+    <button type="button" class="btn" style="background:#9ca3af;" (click)="crudManager.clearLineUpForm()">Neuer
+        Act</button>
+    }
+</form>
+
+<h2 style="margin-top: 2rem;">👥 Acts</h2>
+
+<ul class="lineup-list">
+    @for (act of festival.lineUp; track $index) {
+    <li class="show-act card" (click)="crudManager.editLineUpAct(festival, $index, lineUpContainer)">
+        <div>
+            <strong>{{ act.artistName }}</strong>
+            <p>{{ act.stage }} | {{ act.date | date:'dd.MM.yyyy' }} | {{ act.timeBeginn }} – {{ act.timeEnd }}</p>
+        </div>
+        <button type="button" (click)="crudManager.removeLineUpAct(festival, $index)">
+            ✖ Entfernen
+        </button>
+    </li>
+    }
+</ul>
+}

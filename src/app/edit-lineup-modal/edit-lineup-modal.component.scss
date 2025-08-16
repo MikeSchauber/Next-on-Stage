@@ -1,0 +1,55 @@
+@import "../../mixins.scss";
+
+.show-act {
+  @include dFlex($g: 4px, $fd: row, $jc: space-between);
+  width: 100%;
+}
+
+.lineup-list {
+  @include dFlex($ai: flex-start, $g: 16px);
+}
+
+.lineup-list {
+  margin-top: 1rem;
+  list-style: none;
+  padding: 0;
+
+  .show-act {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    margin-bottom: 0.5rem;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+
+    div {
+      strong {
+        font-size: 1.1rem;
+      }
+
+      p {
+        margin: 0.25rem 0;
+        color: #a8a8a8;
+        font-size: 0.9rem;
+      }
+    }
+
+    button {
+      background: #ef4444;
+      color: white;
+      border: none;
+      padding: 0.35rem 0.75rem;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.2s ease-in-out;
+
+      &:hover {
+        background: #dc2626;
+      }
+    }
+  }
+}
