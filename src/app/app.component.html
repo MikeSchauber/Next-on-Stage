@@ -3,7 +3,6 @@
   <!-- Header -->
   <header class="flex between" style="padding: 1rem 0;" #header>
     <div class="logo flex center">
-      <img src="" alt="nextOnStage Logo" style="height: 40px; margin-right: 0.5rem;">
       <h2>Next on Stage</h2>
     </div>
     <nav class="flex center" style="gap: 1rem;">
@@ -18,9 +17,13 @@
   @if (crudManager.activeFestival) {
   <div class="active-festival card shadow flex center">
     <h3>{{ crudManager.activeFestival.emoji }} {{ crudManager.activeFestival.name }}</h3>
-    <p>{{ crudManager.activeFestival.location }} | {{ crudManager.activeFestival.startDate | date:'dd.MM.yyyy' }} - {{
-      crudManager.activeFestival.endDate |
-      date:'dd.MM.yyyy' }}</p>
+    @for (act of crudManager.activeFestival.lineUp; track $index) {
+    <p>{{act.artistName}}</p>
+    <p>{{act.stage}}</p>
+    <p>{{act.date | date: 'dd.MM.yyyy'}}</p>
+    <p>{{act.timeBeginn}} - {{act.timeEnd}} Uhr</p>
+    <p></p>
+    }
   </div>
   }
 
@@ -29,24 +32,24 @@
   <section class="hero card shadow flex center" style="flex-direction: column; text-align: center; margin: 2rem 0;">
     <h1>Dein Festival-Planer 🎶</h1>
     <p class="text-muted" style="max-width: 600px; margin: 0.5rem auto 1.5rem;">
-      Mit <strong>nextOnStage</strong> kannst du deine Festivals speichern, Lineups ansehen
+      Mit <strong>Next on Stage</strong> kannst du deine Festivals speichern, Lineups ansehen
       und deine Lieblings-DJs nie wieder verpassen.
     </p>
     <button class="btn" (click)="modalService.openModal('festival')">Festival hinzufügen</button>
   </section>
   } @else {
-  <!-- Festival Liste -->
 
+  <!-- Festival Liste -->
   <section>
 
     <h2 style="margin-bottom: 1rem;">Meine Festivals</h2>
-    <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
+    <div class="grid">
       @for (festival of crudManager.festivals; track $index) {
       <div class="festival-card card">
         <h3>{{ festival.emoji }} {{ festival.name }}</h3>
         <p class="text-muted">{{ festival.location }} • {{ festival.startDate }} - {{ festival.endDate }}</p>
         <div class="lineup-buttons">
-          <button class="btn" (click)="crudManager.setActiveFestival(festival)">Festival aktivieren</button>
+          <button class="btn" (click)="crudManager.setActiveFestival(festival, $index)">Festival aktivieren</button>
 
           <button class="btn" (click)="modalService.openModal('lineUp')">Line-Up
             bearbeiten</button>
@@ -55,7 +58,7 @@
       }
     </div>
   </section>
-  <div class="more-festivals" >
+  <div class="more-festivals">
     <button class="btn" (click)="modalService.openModal('festival')">Festival hinzufügen</button>
   </div>
   }

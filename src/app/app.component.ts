@@ -25,7 +25,5 @@ export class AppComponent {
     public crudManager: CrudManagerService
   ) {}
 
-  get activeFestival(): Festival | null {
-    return this.crudManager.activeFestival;
-  }
+
 }

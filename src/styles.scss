@@ -1,3 +1,5 @@
+@import "./mixins.scss";
+
 /* =========================
    Global SCSS Reset & Base
    ========================= */
@@ -122,6 +124,7 @@ textarea {
 
 .festival-card {
   max-width: 400px;
+  @include dFlex($g: 8px);
 }
 
 /* Headings */
@@ -167,6 +170,8 @@ h6 {
 .grid {
   display: grid;
   gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
 }
 
 .rounded {

@@ -1,6 +1,7 @@
-import { Injectable } from '@angular/core';
+import { AfterViewInit, Injectable, OnInit } from '@angular/core';
 import { ModalService } from './modal.service';
 import { Festival } from '../interfaces/formulare';
+import { StorageService } from '../storage.service';
 
 @Injectable({
   providedIn: 'root',
@@ -8,17 +9,29 @@ import { Festival } from '../interfaces/formulare';
 export class CrudManagerService {
   festivals: Festival[] = [];
 
-  activeFestival!: Festival | null;
+  activeFestival!: Festival;
 
   editingIndex: number | null = null;
-  constructor(private modalService: ModalService) {
+  constructor(
+    private modalService: ModalService,
+    private storage: StorageService
+  ) {
     this.loadFestivals(); // Festivals beim Start laden
+    console.log(this.activeFestival);
+    this.saveIsActs();
+  }
+
+  saveIsActs() {
+    
   }
 
   // Festival aktivieren
-  setActiveFestival(festival: Festival) {
+  setActiveFestival(festival: Festival, i: number) {
     localStorage.setItem('activeFestival', JSON.stringify(this.festivals));
-    this.activeFestival = festival;
+    if (this.activeFestival) {
+      this.activeFestival = festival;
+    }
+    this.saveFestivals();
   }
 
   /** Add Festival und speichere in LocalStorage */
