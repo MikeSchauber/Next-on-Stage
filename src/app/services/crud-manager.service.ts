@@ -1,6 +1,6 @@
 import { AfterViewInit, Injectable, OnInit } from '@angular/core';
 import { ModalService } from './modal.service';
-import { Festival } from '../interfaces/formulare';
+import { Festival, LineUpAct } from '../interfaces/formulare';
 import { StorageService } from '../storage.service';
 
 @Injectable({
@@ -17,12 +17,30 @@ export class CrudManagerService {
     private storage: StorageService
   ) {
     this.loadFestivals(); // Festivals beim Start laden
-    console.log(this.activeFestival);
     this.saveIsActs();
   }
 
   saveIsActs() {
-    
+    let lineups = [
+      this.storage.isThursdayLineup,
+      this.storage.isFridayLineup,
+      this.storage.isSaturdayLineup,
+      this.storage.isSundayLineup,
+    ].flat();
+    const festival = this.festivals.find((e) => e.name === 'Indian Spirit');
+
+    if (festival) {
+      lineups.forEach((act: LineUpAct) => {
+        festival.lineUp.push(act);
+      });
+    }
+
+    console.log(festival);
+  }
+
+  openLineUp(i: number) {
+    this.editingIndex = i;
+    this.modalService.openModal('lineUp');
   }
 
   // Festival aktivieren

@@ -1,10 +1,11 @@
 <h2 #lineUpContainer>🎶 LineUp bearbeiten</h2>
 
-@for (festival of crudManager.festivals; track $index) {
 
-
+@if (crudManager.editingIndex !== null) {
 <!-- Formular zum Hinzufügen neuer Acts -->
-<form #lineUpForm="ngForm" (ngSubmit)="crudManager.addLineUpAct(festival, lineUpForm)" class="lineup-form">
+<form #lineUpForm="ngForm"
+    (ngSubmit)="crudManager.addLineUpAct(crudManager.festivals[crudManager.editingIndex], lineUpForm)"
+    class="lineup-form">
 
     <label>Künstlername</label>
     <input type="text" name="artistName" [(ngModel)]="modalService.newLineUpAct.artistName" required />
@@ -24,7 +25,7 @@
     <label>Stage</label>
     <select name="stage" [(ngModel)]="modalService.newLineUpAct.stage" required>
         <option value="">-- bitte auswählen --</option>
-        @for (stage of festival.stages; track $index) {
+        @for (stage of crudManager.festivals[crudManager.editingIndex].stages; track $index) {
         <option [value]="stage">{{ stage }}</option>
         }
     </select>
@@ -45,13 +46,15 @@
 <h2 style="margin-top: 2rem;">👥 Acts</h2>
 
 <ul class="lineup-list">
-    @for (act of festival.lineUp; track $index) {
-    <li class="show-act card" (click)="crudManager.editLineUpAct(festival, $index, lineUpContainer)">
+    @for (act of crudManager.festivals[crudManager.editingIndex].lineUp; track $index) {
+    <li class="show-act card"
+        (click)="crudManager.editLineUpAct(crudManager.festivals[crudManager.editingIndex], $index, lineUpContainer)">
         <div>
             <strong>{{ act.artistName }}</strong>
             <p>{{ act.stage }} | {{ act.date | date:'dd.MM.yyyy' }} | {{ act.timeBeginn }} – {{ act.timeEnd }}</p>
         </div>
-        <button type="button" (click)="crudManager.removeLineUpAct(festival, $index)">
+        <button type="button"
+            (click)="crudManager.removeLineUpAct(crudManager.festivals[crudManager.editingIndex], $index)">
             ✖ Entfernen
         </button>
     </li>

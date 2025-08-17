@@ -16,16 +16,21 @@
   <!-- Aktives Festival -->
   @if (crudManager.activeFestival) {
   <div class="active-festival card shadow flex center">
-    <h3>{{ crudManager.activeFestival.emoji }} {{ crudManager.activeFestival.name }}</h3>
-    @for (act of crudManager.activeFestival.lineUp; track $index) {
-    <p>{{act.artistName}}</p>
-    <p>{{act.stage}}</p>
-    <p>{{act.date | date: 'dd.MM.yyyy'}}</p>
-    <p>{{act.timeBeginn}} - {{act.timeEnd}} Uhr</p>
-    <p></p>
-    }
+    <h3 class="festival-title">{{ crudManager.activeFestival.emoji }} {{ crudManager.activeFestival.name }}</h3>
+
+    <div class="acts">
+      @for (act of getCurrentAndNextActs(); track $index) {
+      <div class="act" [ngClass]="{'current': isCurrentAct(act), 'next': !isCurrentAct(act)}">
+        <p class="artist-name">{{ act.artistName }}</p>
+        <p class="stage">{{ act.stage }}</p>
+        <p class="time">{{ act.timeBeginn }} - {{ act.timeEnd }} Uhr</p>
+      </div>
+      }
+    </div>
   </div>
   }
+
+
 
   @if (crudManager.festivals.length === 0) {
   <!-- Hero Section -->
@@ -51,7 +56,7 @@
         <div class="lineup-buttons">
           <button class="btn" (click)="crudManager.setActiveFestival(festival, $index)">Festival aktivieren</button>
 
-          <button class="btn" (click)="modalService.openModal('lineUp')">Line-Up
+          <button class="btn" (click)="crudManager.openLineUp($index)">Line-Up
             bearbeiten</button>
         </div>
       </div>
